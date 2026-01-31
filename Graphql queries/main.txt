@@ -1,0 +1,45 @@
+query Query($type: MediaType,$mediaId: Int,$sort: [MediaSort],$popularityLesser: Int,$isMain: Boolean,$role: CharacterRole) {
+  Media(type: $type, id: $mediaId, sort: $sort, popularity_lesser: $popularityLesser) {
+    id
+    title {
+      english
+      romaji
+    }
+    popularity
+    startDate {
+      year
+    }
+    studios(isMain: $isMain) {
+      nodes {
+        name
+      }
+    }
+    source
+    rankings {
+      allTime
+      type
+      rank
+    }
+    genres
+    tags {
+      name
+    }
+    chapters
+    characters(role: $role) {
+      nodes {
+        name {
+          full
+        }
+      }
+    }
+  }
+}
+
+
+{
+  "type": "ANIME",
+  "sort": "POPULARITY_DESC",
+  "popularityLesser": 862477,
+  "isMain": true,
+  "role": "MAIN"
+}
