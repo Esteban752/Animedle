@@ -1,4 +1,4 @@
-import { findAllUsers, insertUser } from '../services/user.service.js'
+import { findAllUsers, insertUser, deleteUserbyId } from '../services/user.service.js'
 
 // GET
 export async function getAllUsers(req, res) {
@@ -23,4 +23,22 @@ export async function createUser(req, res) {
   res.status(201).json(user)
 }
 
+export async function deleteUser(req, res) {
+  try {
+      const { id } = req.params
+      const deletedUser = await deleteUserbyId(id)
+      
+      if (!deletedUser) {
+        return res.status(404).json({ error: 'User not found' })
+      }
+      
+      res.json({ 
+        message: 'User deleted successfully', 
+        user: deletedUser 
+      })
+    } catch (error) {
+      console.error('Error deleting user:', error)
+      res.status(500).json({ error: 'Failed to delete user' })
+  }
+}
 

@@ -1,13 +1,12 @@
-CREATE TABLE user(
+CREATE TABLE users(
     id SERIAL PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
     score INT
 );
 
 CREATE TABLE password(
-    userId SERIAL PRIMARY KEY,
+    userId SERIAL PRIMARY KEY REFERENCES users(id),
     userPassword VARCHAR(50)
-    FOREIGN KEY (userId) REFERENCES users(id)
 );
 
 
@@ -26,7 +25,11 @@ CREATE TABLE opening(
     id SERIAL PRIMARY KEY,
     title VARCHAR(50) NOT NULL,
     artist VARCHAR(50) NOT NULL,
-    animeid VARCHAR(50) REFERENCES anime(id) 
+    animeid SERIAL REFERENCES anime(id) 
+);
+
+CREATE TABLE date(
+    date DATE PRIMARY KEY
 );
 
 CREATE TABLE dayscore(
@@ -34,8 +37,4 @@ CREATE TABLE dayscore(
     date DATE REFERENCES date(date) NOT NULL,
     score INT,
     PRIMARY KEY (userId,date)
-);
-
-CREATE TABLE date(
-    date DATE PRIMARY KEY
 );

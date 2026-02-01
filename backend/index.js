@@ -2,6 +2,7 @@ import express from 'express'
 import path from 'path'
 import dotenv from 'dotenv'
 import userRoutes from './routes/user.routes.js'
+import cors from 'cors'
 
 dotenv.config()
 
@@ -13,6 +14,10 @@ const app = express()
 
 // Middleware
 app.use(express.json())
+
+app.use(cors({
+  origin: 'http://localhost:5173'
+}))
 
 // API routes
 app.use('/api/users', userRoutes)

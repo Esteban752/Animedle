@@ -1,4 +1,3 @@
-INSERT INTO user (username) VALUES
-('jack'),
-('lisa'),
-('roica');
+INSERT INTO users(username) VALUES
+    ('roicalamar'),
+    ('user1');

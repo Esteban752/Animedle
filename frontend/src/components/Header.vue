@@ -12,19 +12,33 @@
 </script>
 
 <style>
-
+@font-face {
+    font-family: "Shonendle";
+    src: url("../../dist/assets/shonen/Shonen\ \(Namikus\).otf");
+}
+@font-face {
+    font-family: "Shonendle-bold";
+    src: url("../../dist/assets/shonen/Shonen\ Bold\ \ \(Namikus\).otf");
+}
+@font-face {
+    font-family: "Shonendle-bold-italic";
+    src: url("../../dist/assets/shonen/Shonen\ Bold\ Italic\ \(Namikus\).otf");
+}
+@font-face {
+    font-family: "Shonendle-italic";
+    src: url("../../dist/assets/shonen/Shonen\ Italic\ \(Namikus\).otf");
+}
 .header {
   display: flex;
   flex-direction: row;
   gap: 5vw;
-  height: 5vh;
 }
 
-a {
+.header a {
   text-decoration: none;
 }
 
-button {
+.header button {
   align-items: center;
   background-image: linear-gradient(144deg, #af40ff, #5b42f3 50%, #00ddeb);
   border: 0;
@@ -48,13 +62,13 @@ button {
   transition: all 0.3s;
 }
 
-button:active,
-button:hover {
+.header button:active, .header button:hover {
   outline: 0;
 }
 
-button span {
+.header button span {
   background-color: rgb(5, 6, 45);
+  font-family: 'Shonendle';
   padding: 16px 24px;
   border-radius: 6px;
   width: 100%;
@@ -62,11 +76,11 @@ button span {
   transition: 300ms;
 }
 
-button:hover span {
+.header button:hover span {
   background: none;
 }
 
-button:active {
+.header button:active {
   transform: scale(0.9);
 }
 

@@ -14,4 +14,8 @@ import Header from './components/Header.vue';
 </script>
 
 <style>
+.container {
+  display: flex;
+  justify-content: center;
+}
 </style>
