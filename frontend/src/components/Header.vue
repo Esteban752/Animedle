@@ -2,7 +2,6 @@
   <header class="header">
     <RouterLink to="/"><button><span>Home</span></button></RouterLink>
     <RouterLink to="/users"><button><span>Users</span></button></RouterLink>
-    <RouterLink to="/game"><button><span>Game</span></button></RouterLink>
   </header>
 </template>
 
@@ -82,6 +81,11 @@
 
 .header button:active {
   transform: scale(0.9);
+}
+
+body {
+  background: url(/img/home_wallpaper.jpg) no-repeat;
+  color: white;
 }
 
 </style>

@@ -82,6 +82,7 @@ async function addUser() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         name: newUser.value.name,
+        score: newUser.value.score,
       })
     })
 
