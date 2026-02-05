@@ -11,6 +11,7 @@
             type="text"
             class="input_search"
             placeholder="Enter your guess"
+            v-model="guess"
         />
         <button type="submit" class="submit_guess"><SendHorizontal/></button>
     </div>
@@ -31,6 +32,11 @@
 
 <script setup>
 import { Info, SendHorizontal  } from 'lucide-vue-next';
+import { ref } from 'vue';
+
+const guess = ref()
+
+
 
 </script>
 

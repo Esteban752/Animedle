@@ -1,11 +1,19 @@
 <template>
   <nav class="nav">
-    <RouterLink to="/"><button>Home</button></RouterLink>
-    <RouterLink to="/users"><button>Ranking</button></RouterLink>
-    <RouterLink to="/"><button>Classic</button></RouterLink>
-    <RouterLink to="/"><button>Opening</button></RouterLink>
-    <RouterLink to="/"><button>Character</button></RouterLink>
-    <RouterLink to="/"><button>Image</button></RouterLink>
+    <div>
+      <img src="" alt="Logo">
+    </div>
+    <div>
+      <RouterLink to="/"><button>Home</button></RouterLink>
+      <RouterLink to="/users"><button>Ranking</button></RouterLink>
+    </div>
+    <div>
+      <RouterLink to="/anidle"><button>Classic</button></RouterLink>
+      <RouterLink to="/opening"><button>Opening</button></RouterLink>
+      <RouterLink to="/"><button>Character</button></RouterLink>
+      <RouterLink to="/"><button>Image</button></RouterLink>
+    </div>
+
   </nav>
 </template>
 
@@ -21,10 +29,12 @@
 .nav {
   display: flex;
   flex-direction: column;
+  position: fixed;
   width: 15%;
+  height: 100%;
   padding-right: 1vw;
   border: 2px solid black;
-  gap: 5vw;
+  gap: 5vh;
 }
 
 .nav a {
@@ -48,6 +58,7 @@
 .nav button:hover {
   transform: translate(-0.05em, -0.05em);
   box-shadow: 0.15em 0.15em;
+  background-color: var(--yellow-background);
 }
 
 .nav button:active {
@@ -55,9 +66,6 @@
   box-shadow: 0.05em 0.05em;
 }
 
-body {
-  background: url(/img/home_wallpaper.jpg) no-repeat fixed;
-  color: white;
-}
+
 
 </style>

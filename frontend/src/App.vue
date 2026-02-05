@@ -33,6 +33,7 @@ import Header from './components/NavBar.vue';
 
 :root {
   --yellow: #e9b50b;
+  --yellow-background: #e4c45c;
   --bloc1: #f0f0f0;
   --gray: #666;
 }
@@ -40,12 +41,19 @@ import Header from './components/NavBar.vue';
 .container {
   display: flex;
   justify-content: center;
-  width: 85%;
+  width: 100%;
+  margin-left: 15%;
 }
 
 #app {
   display: flex;
   
+}
+
+body {
+  margin: 0;
+  background: url(/img/home_wallpaper.jpg) no-repeat fixed;
+  color: white;
 }
 
 h1{
