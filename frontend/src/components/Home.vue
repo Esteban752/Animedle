@@ -1,6 +1,7 @@
 <template>
 <div>
-    <h1>Bienvenue sur Shonendle</h1>
+    <h1>Shonendle</h1>
+    <h2>Test Your Anime Knowledge</h2>
     <div class="games_btn">
         <RouterLink to="/anidle">
           <div @mouseenter="playVideo(classic)" @mouseleave="pauseVideo(classic)" class="classic_div">
@@ -13,7 +14,7 @@
         <RouterLink to="/opening">
           <div @mouseenter="playVideo(opening)" @mouseleave="pauseVideo(opening)" class="opening_div">
             <video muted loop playsinline ref="opening">
-              <source src="/videos/frieren_background.mp4" type="video/mp4">
+              <source src="/videos/frieren.mp4" type="video/mp4">
             </video>
             <span>Opening</span><p>guess the anime with an opening</p>
           </div>
@@ -22,6 +23,7 @@
         <RouterLink to="/image"><div><img src="" alt=""><span>Image</span><p>guess the anime with an image</p></div></RouterLink>
 
     </div>
+    <RouterLink to="replay" class="replay"><div><span>Replay previous day</span></div></RouterLink>
 </div>
 </template>
 
@@ -45,7 +47,7 @@ function pauseVideo(videoRef) {
 
 </script>
 
-<style>
+<style scoped>
 
 .container {
   display: flex;
@@ -54,6 +56,7 @@ function pauseVideo(videoRef) {
 
 .container > div {
   display: flex;
+  width: 100%;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -148,6 +151,50 @@ video {
   -webkit-transform:translateY(-7%);
   -ms-transform:translateY(-7%);/*For IE9*/
   transform:translateY(-7%);
+}
+
+.replay {
+  text-decoration: none;
+  margin-top: 2vh;
+  margin-bottom: 10vh;
+  width: 30%;
+  cursor: pointer;
+  position: relative;
+  padding: 10px 24px;
+  color: rgb(193, 163, 98);
+  border: 2px solid rgb(193, 163, 98);
+  border-radius: 34px;
+  background-color: transparent;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+  overflow: hidden;
+}
+
+.replay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 35%;
+  border-radius: inherit;
+  scale: 0;
+  z-index: -1;
+  background-color: rgb(193, 163, 98);
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.replay:hover::before {
+  scale: 3;
+}
+
+.replay:active {
+  scale: 0.9;
+}
+
+.replay div {
+  text-align: center;
+  font-family: 'shonendle-bold';
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 }
 
 </style>

@@ -123,16 +123,7 @@ onMounted(() => {
 });
 </script>
 
-<style>
-
-h1{
-  font-size: 30px;
-  text-transform: uppercase;
-  font-weight: 300;
-  text-align: center;
-  margin-bottom: 15px;
-  font-family: 'Shonendle-bold';
-}
+<style scoped>
 
 .user-list {
   display: flex;
