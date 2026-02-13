@@ -76,7 +76,6 @@ svg {
   gap: 1rem;
   border: 4px solid #000;
   height: 8vh;
-  max-width: 350px;
   transition: all 400ms cubic-bezier(0.23, 1, 0.32, 1);
   transform-style: preserve-3d;
   /*transform: rotateX(10deg) rotateY(-10deg);*/

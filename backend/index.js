@@ -2,6 +2,7 @@ import express from 'express'
 import path from 'path'
 import dotenv from 'dotenv'
 import userRoutes from './routes/user.routes.js'
+import anilistRoutes from './routes/anilist.routes.js'
 import cors from 'cors'
 
 dotenv.config()
@@ -19,8 +20,12 @@ app.use(cors({
   origin: 'http://localhost:5173'
 }))
 
+
 // API routes
 app.use('/api/users', userRoutes)
+
+app.use('/api/anime', anilistRoutes);
+
 
 // Static frontend (Vue build)
 app.use(express.static('../frontend/dist'))

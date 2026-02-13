@@ -1,24 +1,29 @@
 CREATE TABLE users(
-    id SERIAL PRIMARY KEY,
-    username VARCHAR(50) NOT NULL UNIQUE,
+    id SERIAL UNIQUE,
+    username VARCHAR(50) PRIMARY KEY,
     score INT
 );
 
 CREATE TABLE password(
-    userId SERIAL PRIMARY KEY REFERENCES users(id),
+    userName VARCHAR(50) PRIMARY KEY REFERENCES users(username),
     userPassword VARCHAR(50)
 );
 
 
 CREATE TABLE anime(
     id SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
-    romaji VARCHAR(50),
-    genres TEXT[],
-    tags TEXT[],
-    year DATE NOT NULL,
+    anilistid INTEGER UNIQUE NOT NULL,
+    name VARCHAR(150) NOT NULL,
+    romaji VARCHAR(150),
+    genres JSONB,
+    tags JSONB,
+    year INTEGER NOT NULL,
+    source VARCHAR NOT NULL,
+    synonyms JSONB,
+    cover VARCHAR NOT NULL,
     studio VARCHAR(50) NOT NULL,
-    character TEXT[]
+    characters JSONB,
+    popularity INTEGER NOT NULL
 );
 
 CREATE TABLE opening(
@@ -33,8 +38,8 @@ CREATE TABLE date(
 );
 
 CREATE TABLE dayscore(
-    userId SERIAL REFERENCES users(id) NOT NULL,
+    userName VARCHAR(50) REFERENCES users(username) NOT NULL,
     date DATE REFERENCES date(date) NOT NULL,
     score INT,
-    PRIMARY KEY (userId,date)
+    PRIMARY KEY (userName,date)
 );

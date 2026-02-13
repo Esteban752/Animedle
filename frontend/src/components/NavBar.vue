@@ -12,6 +12,7 @@
       <RouterLink to="/opening"><button>Opening</button></RouterLink>
       <RouterLink to="/"><button>Character</button></RouterLink>
       <RouterLink to="/"><button>Image</button></RouterLink>
+      <RouterLink to="/database"><button>Database</button></RouterLink>
     </div>
 
   </nav>

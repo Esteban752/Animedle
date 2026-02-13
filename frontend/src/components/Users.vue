@@ -54,7 +54,7 @@ const loading = ref(false)
 const error = ref(null)
 const newUser = ref({ name: '',score: 0})
 
-// URL de l'API (ajustez selon votre config)
+// URL de l'API 
 const API_URL = 'http://localhost:3000/api/users'
 
 // Récupérer tous les utilisateurs
