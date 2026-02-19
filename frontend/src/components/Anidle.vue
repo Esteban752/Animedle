@@ -6,23 +6,32 @@
     </div>
 
     <div class="guess">
+
         <div class="shadow_input"></div>
-        <input
-            type="text"
-            class="input_search"
-            placeholder="Enter your guess"
-            v-model="guess"
-        />
-        <button type="submit" class="submit_guess"><SendHorizontal/></button>
+        <form action="" @submit.prevent="guessAnime">
+            <input
+                type="text"
+                class="input_search"
+                placeholder="Enter your guess"
+                v-model="guess"
+            />
+            <button type="submit" class="submit_guess" @click="submit"><SendHorizontal/></button>
+        </form>
+
     </div>
+
+    <button @click="resetGuess">Reset</button>
 
     <div>
         <!-- réponse du search -->
     </div>
 
-    <div>
-        <!-- réponse deja guess -->
-    </div>
+    <section class="previous_guesses">
+        <div v-for="anime in allGuess" :key="anime">
+            <img :src="`${anime[2]}`" alt="cover">
+            <h3>{{ anime[1] }}</h3>
+        </div>
+    </section>
 
 </div>
 
@@ -32,12 +41,84 @@
 
 <script setup>
 import { Info, SendHorizontal  } from 'lucide-vue-next';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import { getAllGuesses } from '../composable/AnidleGuesses.js';
 
-const guess = ref()
+// array contenant les guess de l'utilisateur dans une variable de session
+const allGuessArray = getAllGuesses();
+const allGuess = allGuessArray.array;
 
+// URLS de l'API du serveur
+const DAILYANIME_API_URL = 'http://localhost:3000/api/daily'
+const ALLANIME_API_URL = 'http://localhost:3000/api/anime';
 
+// input de l'utilisateur
+const guess = ref();
+// réponse du jour
+const answer = ref([]);
+// tous les animes de la database
+const animes = ref([]);
 
+const error = ref(null);
+const message = ref('');
+
+// récupere l'anime du jour
+async function fetchDailyAnime() {
+  error.value = null;
+  try {
+    const response = await fetch(DAILYANIME_API_URL);
+    if (!response.ok) throw new Error('Erreur réseau');
+    answer.value = await response.json();
+  } catch (err) {
+    error.value = 'Impossible de charger le daily anime: ' + err.message;
+    console.error(err);
+  }
+}
+
+// récupere tous les animes de la databse
+async function fetchAllAnimes() {
+  error.value = null;
+  try {
+    const response = await fetch(ALLANIME_API_URL);
+    if (!response.ok) throw new Error('Erreur réseau');
+    animes.value = await response.json();
+  } catch (err) {
+    error.value = 'Impossible de charger les animes: ' + err.message;
+    console.error(err);
+  }
+}
+
+// click du bouton guess
+const guessAnime = () => {
+    message.value = '';
+    if (guess.value == undefined) {
+        message.value = "aucun anime renseigné";
+    }
+    if (guess.value == answer.value.name) {
+        console.log("win");
+    }
+    else {
+        let i = 0;
+        while (i < animes.value.length && animes.value[i].name != guess.value) {
+            i++;
+        }
+        if (i < animes.value.length) {
+            allGuess.value.splice(0, 0, [animes.value[i].id, animes.value[i].name, animes.value[i].cover]);
+        }
+        console.log(allGuess.value);
+        console.log(answer.value.name);
+    }
+
+}
+
+const resetGuess = () => {
+    allGuess.value = [];
+}
+
+onMounted(() => {
+    fetchAllAnimes();
+    fetchDailyAnime();
+});
 </script>
 
 <style scoped>
@@ -81,6 +162,21 @@ svg {
   /*transform: rotateX(10deg) rotateY(-10deg);*/
   perspective: 1000px;
   box-shadow: 1vw 1vh 0 #000;
+}
+
+form {
+    position: relative;
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1rem;
+
+    height: 8vh;
+    transition: all 400ms cubic-bezier(0.23, 1, 0.32, 1);
+    transform-style: preserve-3d;
+    perspective: 1000px;
+
 }
 
 .guess:hover {
@@ -177,5 +273,23 @@ svg {
   transform: translateZ(50px);
   z-index: 4;
   border: 2px solid #000;
+}
+
+.previous_guesses {
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
+
+}
+
+.previous_guesses div {
+    display: flex;
+    gap: 2vw;
+    border: 1px solid white;
+}
+
+.previous_guesses div img {
+    width: 7.5vw;
+    height: 15vh; 
 }
 </style>

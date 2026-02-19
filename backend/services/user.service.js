@@ -1,5 +1,4 @@
 import { pool } from '../db/postgres.js'
-console.log("USER SERVICE LOADED")
 
 
 export async function findAllUsers() {

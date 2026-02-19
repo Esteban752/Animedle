@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "cron": "^4.4.0",
     "lucide-vue-next": "^0.563.0"
   }
 }

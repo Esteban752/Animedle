@@ -1,9 +1,10 @@
-import express from 'express'
-import path from 'path'
-import dotenv from 'dotenv'
-import userRoutes from './routes/user.routes.js'
-import anilistRoutes from './routes/anilist.routes.js'
-import cors from 'cors'
+import express from 'express';
+import dotenv from 'dotenv';
+import { initializeScheduler } from './config/scheduler.js';
+import userRoutes from './routes/user.routes.js';
+import anilistRoutes from './routes/anilist.routes.js';
+import dailyRoutes from './routes/daily.routes.js';
+import cors from 'cors';
 
 dotenv.config()
 
@@ -20,11 +21,15 @@ app.use(cors({
   origin: 'http://localhost:5173'
 }))
 
+// fonction executé tous les jours à 00h00
+initializeScheduler();
 
 // API routes
-app.use('/api/users', userRoutes)
+app.use('/api/users', userRoutes);
 
 app.use('/api/anime', anilistRoutes);
+
+app.use('/api/daily', dailyRoutes);
 
 
 // Static frontend (Vue build)

@@ -26,6 +26,22 @@ CREATE TABLE anime(
     popularity INTEGER NOT NULL
 );
 
+CREATE TABLE anime_temp(
+    id SERIAL PRIMARY KEY,
+    anilistid INTEGER UNIQUE NOT NULL,
+    name VARCHAR(150) NOT NULL,
+    romaji VARCHAR(150),
+    genres JSONB,
+    tags JSONB,
+    year INTEGER NOT NULL,
+    source VARCHAR NOT NULL,
+    synonyms JSONB,
+    cover VARCHAR NOT NULL,
+    studio VARCHAR(50) NOT NULL,
+    characters JSONB,
+    popularity INTEGER NOT NULL
+);
+
 CREATE TABLE opening(
     id SERIAL PRIMARY KEY,
     title VARCHAR(50) NOT NULL,
@@ -42,4 +58,10 @@ CREATE TABLE dayscore(
     date DATE REFERENCES date(date) NOT NULL,
     score INT,
     PRIMARY KEY (userName,date)
+);
+
+CREATE TABLE dailyanime(
+    date DATE REFERENCES date(date) NOT NULL,
+    animeid SERIAL REFERENCES anime(id),
+    PRIMARY KEY(date) 
 );
