@@ -4,14 +4,19 @@
         <h1>Classic</h1>
         <button class="info"><Info/></button>
     </div>
-
+    
     <div class="guess">
 
         <div class="shadow_input"></div>
-        <form action="" @submit.prevent="guessAnime">
+        <form action="" @submit.prevent="guessAnime()">
             <input
                 type="text"
                 class="input_search"
+                v-on:focus="focusOn"
+                v-on:focusout="focusOut"
+                v-on:keypress="search(guess)"
+                v-on:keyup.delete="search(guess)"
+                ref="input_search"
                 placeholder="Enter your guess"
                 v-model="guess"
             />
@@ -20,13 +25,17 @@
 
     </div>
 
-    <button @click="resetGuess">Reset</button>
-
-    <div>
-        <!-- réponse du search -->
+    <div class="anime_search" v-if="focus == true"> <!---->
+        <ul>
+            <li v-for="anime in animesSearched" v-on:focus="focusOn">
+                <button @mousedown.prevent="searchedClicked(anime.anime.name)"><h3>{{ anime.anime.name }}</h3></button>
+            </li>
+        </ul>
     </div>
 
-    <section class="previous_guesses">
+    <button @click="resetGuess" class="reset">Reset</button>
+
+    <section class="previous_guesses" v-if="allGuess.length > 0">
         <table>
             <thead>
                 <tr>
@@ -44,7 +53,7 @@
                         <div class="anime_img_title">
                             <img :src="`${anime[2]}`" alt="cover">
                             <div class="overlay">
-                                <h3 class="anime_title">{{ anime[1] }}</h3>
+                                <h3>{{ anime[1] }}</h3>
                             </div>
                         </div>
 
@@ -56,7 +65,7 @@
                             <ArrowBigUp class="arrow" v-else-if="anime[3] < answer.year" />
                         </div>
                     </td>
-                    <td :class="{good_answer: anime[4] == answer.source,bad_answer: anime[4] != answer.source}"> {{ anime[4] }}</td>
+                    <td :class="{good_answer: anime[4] == answer.source,bad_answer: anime[4] != answer.source}"> {{ anime[4].replace("_", " ") }}</td>
                     <td :class="{good_answer: anime[5] == answer.studio,bad_answer: anime[5] != answer.studio}"> {{ anime[5] }}</td>
                     <td>
                         <ul>
@@ -92,7 +101,23 @@
 import { Info, SendHorizontal, ArrowBigDown, ArrowBigUp } from 'lucide-vue-next';
 import { onMounted, ref } from 'vue';
 import { getAllGuesses } from '../composable/AnidleGuesses.js';
+import { searchAnimeByName, searchAnimeWeighted } from '../composable/SearchAnime.js';
 
+const focusOn = () => {
+    focus.value = true;
+}
+
+const focusOut = () => {
+    focus.value = false;
+}
+
+const search = (name) => {
+    animesSearched.value = searchAnimeByName(name,animes.value);
+}
+
+const searchedClicked = (guessInput) => {
+    guessAnime(guessInput);
+}
 // array contenant les guess de l'utilisateur dans une variable de session
 const allGuessArray = getAllGuesses();
 const allGuess = allGuessArray.array;
@@ -107,6 +132,12 @@ const guess = ref();
 const answer = ref([]);
 // tous les animes de la database
 const animes = ref([]);
+// array contenant le resultat de la recherche
+const animesSearched = ref([]);
+// search input element
+const input_search = ref();
+
+const focus = ref(false);
 
 const error = ref(null);
 const message = ref('');
@@ -138,7 +169,8 @@ async function fetchAllAnimes() {
 }
 
 // click du bouton guess
-const guessAnime = () => {
+const guessAnime = (guessInput = guess.value) => {
+    guess.value = guessInput;
     message.value = '';
     if (guess.value == undefined) {
         message.value = "aucun anime renseigné";
@@ -155,8 +187,8 @@ const guessAnime = () => {
             let currAnim = animes.value[i];
             allGuess.value.splice(0, 0, [currAnim.id, currAnim.name, currAnim.cover, currAnim.year, currAnim.source, currAnim.studio, currAnim.genres, currAnim.tags]);
         }
-        console.log(allGuess.value);
-        console.log(answer.value.genres.includes("Action"));
+        guess.value = '';
+        input_search.value.blur()
     }
 
 }
@@ -179,7 +211,6 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5vh;
 }
 
 .info {
@@ -198,6 +229,9 @@ svg {
     color: #fff;
 }
 
+.reset {
+    margin-top: 5vh;
+}
 
 .guess {
   position: relative;
@@ -211,7 +245,6 @@ svg {
   height: 8vh;
   transition: all 400ms cubic-bezier(0.23, 1, 0.32, 1);
   transform-style: preserve-3d;
-  /*transform: rotateX(10deg) rotateY(-10deg);*/
   perspective: 1000px;
   box-shadow: 1vw 1vh 0 #000;
 }
@@ -232,7 +265,6 @@ form {
 }
 
 .guess:hover {
-  /*transform: rotateX(5deg) rotateY(1 deg) scale(1.05);*/
   box-shadow: 2.5vw 2.5vh 0 -5px var(--yellow), 2.5vw 2.5vh 0 0 #000;
 }
 
@@ -327,23 +359,29 @@ form {
   border: 2px solid #000;
 }
 
-.previous_guesses {
-    display: flex;
-    flex-direction: column;
-    gap: 2vh;
+/* =================  ANIME SEARCH ================= */
 
+.anime_search {
+    width: 50%;
+    z-index: 10;
+    position: absolute;
+    top: 25vh;
 }
 
-.previous_guesses > div {
-    display: flex;
-    gap: 2vw;
-    border: 1px solid white;
+.anime_search ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin: 0;
+    max-height: 40vh;
+    overflow:hidden; 
+    overflow-y:scroll;
 }
 
-.previous_guesses > div img {
-    width: 7.5vw;
-    height: 15vh; 
+.anime_search ul li button{
+    width: 100%;
 }
+
+/* =================  ANSWER COLOR CORRESPONDANCE ================= */
 
 .good_answer {
     color: rgb(4, 232, 4);
@@ -390,33 +428,34 @@ thead th {
 
 tbody tr {
   background: #1A2C3D;
-  border: 4px solid #000;
   height: 6vh;
   width: calc(100%/6);
-  animation: slideRow 0.4s ease forwards;
-  opacity: 0;
-  transform: translateX(-20px);
-  box-shadow: 1vw 1vh 0 #000;
-  transition: all 400ms cubic-bezier(0.23, 1, 0.32, 1);
+  animation: slide-right 0.5s ease-in-out both;
+  box-shadow: 0.5vw 1vh  #000;
+  
 }
 
 /* ================= CELLS ================= */
 
 td {
-  padding: 0.8rem;
-  text-align: center;
-  font-size: 0.9rem;
+    padding: 0.8rem;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+td li h3 {
+    font-size: 0.9rem;
 }
 
 /* coins arrondis subtils */
 tbody tr td:first-child {
-  border-top-left-radius: 6px;
-  border-bottom-left-radius: 6px;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
 }
 
 tbody tr td:last-child {
-  border-top-right-radius: 6px;
-  border-bottom-right-radius: 6px;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
 }
 
 td img {
@@ -428,13 +467,6 @@ td ul {
     padding-left: 0;
 }
 
-.anime_title {
-    /*display: none;*/
-    position: relative; 
-    z-index: 2; 
-    transform: translate(-50%, -50%);
-}
-
 .anime_img_title {
     position: relative;
     width: 100%;
@@ -444,12 +476,21 @@ td ul {
 
 .overlay {
     position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
     background: rgba(0,0,0,0.5);
     opacity: 0;
     transition: opacity 0.3s ease;
+}
+
+.overlay h3 {
+    font-size: 0.8rem;
 }
 
 .anime_img_title:hover .overlay {
@@ -475,28 +516,22 @@ td ul {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%); /* Centre parfaitement */
-    z-index: 1;               /* Derrière le texte */
-    opacity: 0.3;             /* Optionnel : effet filigrane */
-    width: 20vw;
+    transform: translate(-50%, -50%);
+    z-index: 1; 
+    opacity: 0.3;
+    width: 15vw;
     height: 20vh; 
 }
 
 /* ================= ANIMATION ================= */
 
-@keyframes slideRow {
-  to {
-    opacity: 1;
+@keyframes slide-right {
+  0% {
+    transform: translateX(-100px);
+  }
+  100% {
     transform: translateX(0);
   }
 }
-
-/* animation progressive */
-tbody tr:nth-child(1) { animation-delay: 0.05s; }
-tbody tr:nth-child(2) { animation-delay: 0.1s; }
-tbody tr:nth-child(3) { animation-delay: 0.15s; }
-tbody tr:nth-child(4) { animation-delay: 0.2s; }
-tbody tr:nth-child(5) { animation-delay: 0.25s; }
-
 
 </style>
