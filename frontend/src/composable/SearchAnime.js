@@ -2,11 +2,12 @@
  * Recherche des animes par nom avec correspondance floue
  * @param {string} searchTerm - Le terme de recherche
  * @param {Array} animesJSON - Tableau d'objets anime
+ * @param {Array} animesIgnore - Tableau d'anime qui doivent etre ignorés de la recherche
  * @param {number} threshold - Seuil de similarité (0-1, défaut: 0.6)
  * @param {number} maxResults - Nombre maximum de résultats (défaut: 10)
  * @returns {Array} - Tableau d'animes correspondants triés par pertinence
  */
-export function searchAnimeByName(searchTerm, animesJSON, threshold = 0.6, maxResults = 10) {
+export function searchAnimeByName(searchTerm, animesJSON, animesIgnore, threshold = 0.6, maxResults = 10) {
   if (!searchTerm || searchTerm.trim() === '') {
     return [];
   }
@@ -75,8 +76,8 @@ export function searchAnimeByName(searchTerm, animesJSON, threshold = 0.6, maxRe
       }
     }
 
-    // Ajouter si le score dépasse le seuil
-    if (bestMatch.similarity >= threshold) {
+    // Ajouter si le score dépasse le seuil et si l'anime n'as pas deja eté guess
+    if (bestMatch.similarity >= threshold & animesIgnore.includes(bestMatch.anime.name) == false) {
       results.push(bestMatch);
     }
   }
@@ -126,8 +127,8 @@ export function searchAnimeStartsWith(searchTerm, animesJSON, maxResults = 10) {
 /**
  * Recherche avec pondération (favorise les titres populaires)
  */
-export function searchAnimeWeighted(searchTerm, animesJSON, threshold = 0.6, maxResults = 10) {
-  const results = searchAnimeByName(searchTerm, animesJSON, threshold, 100);
+export function searchAnimeWeighted(searchTerm, animesJSON, animesIgnore, threshold = 0.6, maxResults = 10) {
+  const results = searchAnimeByName(searchTerm, animesJSON, animesIgnore, threshold, 100);
 
   // Pondérer par popularité
   results.forEach(result => {

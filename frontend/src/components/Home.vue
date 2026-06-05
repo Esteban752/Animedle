@@ -19,8 +19,44 @@
             <span>Opening</span><p>guess the anime with an opening</p>
           </div>
         </RouterLink>
-        <RouterLink to="/character"><div><img src="" alt=""><span>Character</span><p>guess the character with an image</p></div></RouterLink>
-        <RouterLink to="/image"><div><img src="" alt=""><span>Image</span><p>guess the anime with an image</p></div></RouterLink>
+        <RouterLink to="/character">
+          <div @mouseenter="playVideo(character)" @mouseleave="pauseVideo(character)" class="character_div">
+            <video muted loop playsinline ref="character">
+              <source src="/videos/snk_back.mp4" type="video/mp4">
+            </video>
+            <span>Character</span><p>guess the character with an image</p>
+          </div>
+        </RouterLink>
+        <RouterLink to="/image">
+          <div @mouseenter="playVideo(image)" @mouseleave="pauseVideo(image)" class="image_div">
+            <video muted loop playsinline ref="image">
+              <source src="/videos/jjk_background.mp4" type="video/mp4">
+            </video>
+            <span>Image</span><p>guess the anime with an image</p>
+          </div>
+        </RouterLink>
+
+        <RouterLink to="/quote" class="quote_a">
+          <div @mouseenter="playVideo(quote)" @mouseleave="pauseVideo(quote)" class="quote_div">
+            <video muted loop playsinline ref="quote">
+              <source src="/videos/fate_soon.mp4" type="video/mp4">
+            </video>
+            <span>Quote</span><p>guess the character with a quote</p>
+          </div>
+          <span class="badge">soon</span>
+        </RouterLink>
+
+
+        <RouterLink to="/seyuu" class="seyuu_a">
+          <div @mouseenter="playVideo(seyuu)" @mouseleave="pauseVideo(seyuu)" class="seyuu_div">
+            <video muted loop playsinline ref="seyuu">
+              <source src="/videos/kny_soon.mp4" type="video/mp4">
+            </video>
+            <span>Seyuu</span><p>guess the character with an another character with the same voice actor</p>
+          </div>
+          <span class="badge">soon</span>
+        </RouterLink>
+    
 
     </div>
     <RouterLink to="replay" class="replay"><div><span>Replay previous day</span></div></RouterLink>
@@ -28,10 +64,14 @@
 </template>
 
 <script setup>
-import {  ref } from 'vue';
+import { ref } from 'vue';
 
 const classic = ref()
 const opening = ref()
+const character = ref()
+const image = ref()
+const quote = ref()
+const seyuu = ref()
 
 function playVideo(videoRef) {
   if (videoRef) {
@@ -70,27 +110,27 @@ function pauseVideo(videoRef) {
     gap: 5vh;
     align-items: center;
     justify-content: center;
-    width: 30%;
-    padding: 5%;
-    border: 2px solid rgb(193, 163, 98);
-    background-color: rgba(193, 163, 98,0.2);
+    width: 40%;
+    /* border: 2px solid rgb(193, 163, 98);
+     background-color: rgba(193, 163, 98,0.2); */
     border-radius: 5%;
 }
 
 .games_btn a {
     text-decoration: none;
     width: 100%;
+    height: 10vh;
     cursor: pointer;
     position: relative;
     padding: 10px 24px;
-    color: rgb(193, 163, 98);
-    border: 2px solid rgb(193, 163, 98);
+    color: rgb(0, 48, 119);
+    border: 2px solid rgb(0, 48, 119);
     border-radius: 34px;
     background-color: transparent;
     font-weight: 600;
     transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
     overflow: hidden;
-    z-index: 10;
+    z-index: 2;
 }
 
 .games_btn a div {
@@ -99,6 +139,7 @@ function pauseVideo(videoRef) {
     align-items: center;
     flex-direction: column;
 }
+
 
 .games_btn a div p {
     font-family: 'shonendle';
@@ -118,7 +159,7 @@ function pauseVideo(videoRef) {
   border-radius: inherit;
   scale: 0;
   z-index: -1;
-  background-color: rgb(193, 163, 98);
+  background-color: rgb(0, 48, 119);
   transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
 }
 
@@ -126,13 +167,14 @@ function pauseVideo(videoRef) {
   scale: 3;
 }
 
-.games_btn a:hover {
+.games_btn a:hover:not(.quote_a, .seyuu_a) {
   scale: 1.1;
 }
 
 .games_btn a:active {
   scale: 1;
 }
+
 
 video {
   width: 100%;
@@ -153,6 +195,35 @@ video {
   transform:translateY(-7%);
 }
 
+
+.quote_div video {
+  -webkit-transform:translateY(15%);
+  -ms-transform:translateY(15%);/*For IE9*/
+  transform:translateY(15%);
+}
+
+.seyuu_div video {
+  -webkit-transform:translateY(7%);
+  -ms-transform:translateY(7%);/*For IE9*/
+  transform:translateY(7%);
+}
+
+.quote_div, .seyuu_div {
+  position: relative;
+  width: calc(100% + 48px);
+  margin-left: -24px;
+}
+
+.badge {
+  z-index: 10;
+  top: -8px;
+  right: -12px;
+  position: absolute;
+  border: 2px solid black;
+  border-radius: 15%;
+  background-color: aliceblue;
+}
+
 .replay {
   text-decoration: none;
   margin-top: 2vh;
@@ -161,8 +232,8 @@ video {
   cursor: pointer;
   position: relative;
   padding: 10px 24px;
-  color: rgb(193, 163, 98);
-  border: 2px solid rgb(193, 163, 98);
+  color: rgb(0, 48, 119);
+  border: 2px solid rgb(0, 48, 119);
   border-radius: 34px;
   background-color: transparent;
   font-weight: 600;
@@ -179,7 +250,7 @@ video {
   border-radius: inherit;
   scale: 0;
   z-index: -1;
-  background-color: rgb(193, 163, 98);
+  background-color: rgb(0, 48, 119);
   transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
 }
 

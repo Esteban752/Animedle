@@ -6,11 +6,13 @@ import { newRandomAnime, insertDailyAnime } from '../services/dailyGame.service.
  */
 export function initializeScheduler() {
     cron.schedule('0 0 * * *', () => {
-    let currentAnime = newRandomAnime();
-    let currentDate = new Date();
-    let dateFormat = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`;
-    insertDailyAnime(currentAnime.id,dateFormat);
+        let currentAnime = newRandomAnime();
+        let currentDate = new Date();
+        let dateFormat = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`;
+        console.log(currentAnime);
+        insertDailyAnime(currentAnime.id,dateFormat);
     }, {
         timezone: "Europe/London"
     });
+    
 }

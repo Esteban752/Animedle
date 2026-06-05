@@ -36,6 +36,7 @@ import Header from './components/NavBar.vue';
   --yellow-background: #e4c45c;
   --bloc1: #f0f0f0;
   --gray: #666;
+  --blue-background: #1A2C3D; 
 }
 
 .container {
