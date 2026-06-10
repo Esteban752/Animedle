@@ -40,9 +40,7 @@
           </div>
           <div class="win-card__actions">
             <div class="win-card-tries">
-              <h2>GG you found it in</h2> 
-              <h2 class="win-card-tries-nb">{{ allGuess.length }}</h2>
-              <h2>tries</h2>
+              <h2>GG you found it in <span class="win-card-tries-nb">{{ allGuess.length }}</span> tries</h2>
             </div>
             <h2>Next mode :</h2>
             <a class="win-card__button win-card__button--mark" href="#"
@@ -179,6 +177,9 @@ const {array: allGuess} = getAllGuesses();
 // boolean contenant si l'utlisateur a gagné l'anidle
 const {win} = getWin();
 
+//
+const {date: lastGuess} = getLastGuess();
+
 // URLS de l'API du serveur
 const DAILYANIME_API_URL = "http://localhost:3000/api/daily";
 const ALLANIME_API_URL = "http://localhost:3000/api/anime";
@@ -227,6 +228,9 @@ async function fetchAllAnimes() {
 
 // click du bouton guess
 const guessAnime = (guessInput = guess.value) => {
+  const now = new Date()
+  lastGuess.value = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  console.log("lastguess update : ", lastGuess.value);
   guess.value = guessInput;
   message.value = "";
   // si aucun anime renseigné
@@ -270,7 +274,7 @@ const guessAnime = (guessInput = guess.value) => {
     guess.value = "";
     input_search.value.blur();
   }
-  console.log(allGuess);
+  //console.log(allGuess);
 };
 
 const resetGuess = () => {
@@ -281,6 +285,12 @@ const resetGuess = () => {
 onMounted(() => {
   fetchAllAnimes();
   fetchDailyAnime();
+  const now = new Date();
+  console.log(lastGuess.value.toString());
+  if (lastGuess.value.toString() != new Date(now.getFullYear(), now.getMonth(), now.getDate())) {
+    allGuess.value = [];
+    win.value = false;
+  }
 });
 </script>
 

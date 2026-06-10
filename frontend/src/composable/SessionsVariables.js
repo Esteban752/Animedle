@@ -11,7 +11,7 @@ const lastguess_session = localStorage.getItem(LAST_GUESS);
 const win_session = localStorage.getItem(WIN);
 
 const array = ref(allguess_session ? JSON.parse(allguess_session) : []);
-const date = ref(lastguess_session ? new Date(lastguess_session) : new Date())
+const date = ref(lastguess_session ? lastguess_session : null)
 const win = ref(win_session ? win_session === 'true' : false)
 
 
@@ -27,11 +27,7 @@ export function getAllGuesses() {
 }
 
 watch(date, (newValue) => {
-    if (newValue instanceof Date) {
-        localStorage.setItem(LAST_GUESS, newValue.toISOString())
-    } else {
-        localStorage.removeItem(LAST_GUESS)
-    }
+    localStorage.setItem(LAST_GUESS, newValue)
 })
 
 export function getLastGuess() {
